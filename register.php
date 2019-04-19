@@ -30,11 +30,11 @@
                 <br>
                 <div class="form-group">
                     <label for="firstname">First Name</label><br>
-                    <input class="form-control" type="text" name="firstname" required="required">
+                    <input class="form-control" type="text" name="firstname" required >
                 </div>
                 <div class="form-group">
                     <label for="lastname">Last name</label><br>
-                    <input class="form-control" type="text" name="lastname" required="required">
+                    <input class="form-control" type="text" name="lastname" required >
                 </div>
                 <hr>
                 <h3 class="text-center">Account Credentials</h3>
@@ -44,10 +44,10 @@
                     <label class="radio-inline"><input type="radio" value="User" name="userlevel"/>User</label>
                 </div>
                 <div class="form-group">
-                <label for="firstname">Username:</label><input class="form-control " type="text" required="required" name="username"/>
+                <label for="firstname">Username:</label><input class="form-control " type="text" required  name="username"/>
                 </div>
                 <div class="form-group">
-                <label for="password">Password:</label><input class="form-control" type="password" required="required" name="password">
+                <label for="password">Password:</label><input class="form-control" type="password" required name="password">
                 </div>
                 <input class="register" type="hidden" name="form" value="Register"> <br>
                 <a href="login.php"><input class="btn text-center btn-default" value="Back"></a> 

@@ -8,9 +8,10 @@
         if(!$ret){
            echo "Error" . mysqli_error($connection);
         }
+        
 ?>
-
-<div class="col-sm-10">
+<div class="row">
+<div class="col-sm-12">
 <br>
         <div class="well well-lg"> 
             <h1>Courses</h1> 
@@ -24,9 +25,10 @@
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
-
-        <div class="row">
-            <div class="col-sm-10">
+</div>
+</div>
+        <div class="row" id="source-html">
+            <div class="col-sm-12">
             <br>
                 <table border="1" class="table table-bordered">
                     <tr>
@@ -45,161 +47,149 @@
                         <td><?php echo $row["course_id"]; ?></td>
                         <td> <?php echo $row["course_name"]; ?> </td>
                         <td> <?php echo $row["grade"];?> </td>
-                        <td> <?php echo $row["subject"];?> </td>
+                        <td> <?php echo $row["subjects"];?> </td>
                         <td> <?php echo $row["components"];?> </td>
                         <td> <?php echo $row["number_of_tests"];?> </td>
                         <td> <button type="button" data-modal="mview" class="button btn btn-primary">View</button></td>
-                        <td> <button type="button" data-modal="medit" class="button btn btn-default">Edit</button> </td>
-                    </tr>
-                    <?php } ?>
+                        <td> <button type="button" data-modal="medit" class="button btn btn-default">Edit</button></td> 
+                        <?php } ?> 
+                        </tr>
                 </table>
             </div>
-        </div>
-
-<div class="modal" id="madd">
+      </div>
+  <div class="modal" id="madd">
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2 class="text-center">Add a Course</h2>
-        <form class="form-horizontal" action="#">
+      <div class="modal-header">
+        <button data-dismiss="modal" class="close">&times;</button>
+        <h2 class="modal-title text-center">Add a Course</h2>
+      </div>   
+      <div class="modal-body">
+        <form class="form-horizontal" method="POST" action="modal-processing.php">
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="courseid">Course ID:</label>
+            <div class="col-sm-6">
+              <input type="number" class="form-control" id="courseid">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="coursename">Course Name:</label>
+            <div class="col-sm-6"> 
+              <input type="text" class="form-control" id="coursename">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="grade">Grade:</label>
+            <div class="col-sm-6">
+              <select class="form-control" name="grade">
+                <option value="Male">8</option>
+                <option value="Female">9</option>
+                <option value="Female">10</option>
+                <option value="Female">11</option>
+                <option value="Female">12</option>
+              </select>
+            </div>
+          </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="courseid">Course ID:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="courseid">
+    <label class="control-label col-sm-4" for="subject">Subject:</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control" id="subject">
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="coursename">Course Name:</label>
-    <div class="col-sm-4"> 
-      <input type="text" class="form-control" id="coursename">
+    <label class="control-label col-sm-4" for="comp">Components:</label>
+    <div class="col-sm-6">
+      <textarea rows="4" cols="50" class="form-control" name="comp"></textarea>
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="coursetype">Course Type:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="coursetype">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="subject">Subject:</label>
-    <div class="col-sm-4">
-      <input type="number" class="form-control" id="subject">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="comp">Components:</label>
-    <div class="col-sm-4">
-        <input type="text" class="form-control" id="comp">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="numtests">Number of Tests:</label>
-    <div class="col-sm-4">
+    <label class="control-label col-sm-4" for="numtests">Number of Tests:</label>
+    <div class="col-sm-6">
       <input type="number" class="form-control" id="numtests">
     </div>
   </div>
-  <div class="form-group"> 
-    <div class="col-sm-offset-2 col-sm-4">
-      <button type="submit" class="btn btn-primary">Add </button>
-    </div>
-  </div>
-</form>
+    <div class="modal-footer">
+      <input type="hidden" name="purpose" value="addcourse">
+      <input type="submit" name="addcourse" id="add" value="Add" class="btn btn-success"/>
+    </div>           
+        </form> 
     </div>
 </div>
-
+                        </div>    
+<!-- View Modal-->
 <div class="modal" id="mview">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2 class="text-center">Course Details</h2>
-        <form class="form-horizontal" action="#">
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="courseid">Course ID:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="courseid">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button data-dismiss="modal" class="close">&times;</button>
+      <h2 class="text-center">Course Details</h2>
     </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="coursename">Course Name:</label>
-    <div class="col-sm-4"> 
-      <input type="text" class="form-control" id="coursename">
+    <div class="modal-body" id="course-details"></div>
+    <div class="modal-footer">
+      <input type="hidden" name="purpose" value="viewcourse">
     </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="coursetype">Course Type:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="coursetype">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="subject">Subject:</label>
-    <div class="col-sm-4">
-      <input type="number" class="form-control" id="subject">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="comp">Components:</label>
-    <div class="col-sm-4">
-        <input type="text" class="form-control" id="comp">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="numtests">Number of Tests:</label>
-    <div class="col-sm-4">
-      <input type="number" class="form-control" id="numtests">
-    </div>
-  </div>
-</form>
-    </div>
+  </div> 
 </div>
 
+<!-- Edit Modal -->
 <div class="modal" id="medit">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2 class="text-center">Edit Course</h2>
-        <form class="form-horizontal" action="#">
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="courseid">Course ID:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="courseid">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button data-dismiss="modal" class="close">&times;</button>
+      <h2 class="modal-title text-center">Edit Course Details</h2>
+    </div>   
+    <div class="modal-body">
+      <form class="form-horizontal" method="post" action="modal-processing.php">
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="courseid">Course ID:</label>
+            <div class="col-sm-6">
+              <input type="number" readonly name="courseid" id="course-id" class="form-control" value="<?php echo $row["course_id"]?>">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="coursename">Course Name:</label>
+            <div class="col-sm-6"> 
+              <input type="text" name="coursename" id="coursename" class="form-control" value="<?php echo $row["course_name"]?>">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="grade">Grade:</label>
+            <div class="col-sm-6">
+              <select class="form-control" name="grade" id="grade" value="<?php echo $row["grade"]?>">
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="subject">Subject:</label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" name="subject" id="subject" value="<?php echo $row["subject"]?>">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="comp">Components:</label>
+            <div class="col-sm-6">
+              <textarea rows="4" cols="50" class="form-control" name="comp" id="comp"><?php echo $row["components"]?></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="numtests">Number of Tests:</label>
+            <div class="col-sm-6">
+              <input type="number" class="form-control" name="numtests" id="numtests" value="<?php echo $row["number_of_tests"]?>">
+            </div>
+          </div>
+          <div class="modal-footer"> 
+            <input type="hidden" name="purpose" value="editcourse">
+            <input type="submit" name="editcourse" id="edit" value="Save Changes" class="btn btn-success"/>
+          </div>  
+        </form>          
+      </div>
     </div>
   </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="coursename">Course Name:</label>
-    <div class="col-sm-4"> 
-      <input type="text" class="form-control" id="coursename">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="coursetype">Course Type:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="coursetype">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="subject">Subject:</label>
-    <div class="col-sm-4">
-      <input type="number" class="form-control" id="subject">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="comp">Components:</label>
-    <div class="col-sm-4">
-        <input type="text" class="form-control" id="comp">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="numtests">Number of Tests:</label>
-    <div class="col-sm-4">
-      <input type="number" class="form-control" id="numtests">
-    </div>
-  </div>
-  <div class="form-group"> 
-    <div class="col-sm-offset-2 col-sm-4">
-      <button type="submit" class="btn btn-primary">Save Changes</button>
-    </div>
-  </div>
-</form>
-    </div>
 </div>
+
 
 <script>
     function exportHTML(){
@@ -219,7 +209,6 @@
        document.body.removeChild(fileDownload);
     }
 </script>
-
 <script>
     var modal = document.getElementsByClassName("modal");
     var button = document.getElementsByClassName("button");
@@ -259,5 +248,5 @@
     }
 
 </script>
-    </div>        
+  </div>        
 </div>

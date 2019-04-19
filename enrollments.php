@@ -9,8 +9,8 @@
            echo "Error" . mysqli_error($connection);
         }
 ?>
-
-<div class="col-sm-10" id="source-html">
+<div class="row">
+<div class="col-sm-12">
     <br>
         <div class="well well-lg"> 
             <h1>Enrollments</h1> 
@@ -24,9 +24,10 @@
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
-
-        <div class="row">
-            <div class="col-sm-10">
+</div>
+</div>
+        <div class="row" id="source-html">
+            <div class="col-sm-12">
             <br>
                 <table border="1" class="table table-bordered">
                     <tr>
@@ -44,7 +45,7 @@
                     ?>
                     <tr>
                         <td><?php echo $row["enrollment_id"]; ?></td>
-                        <td> <?php echo $row["first_name"] . $row["middle_name"] . $row["first_name"]; ?> </td>
+                        <td> <?php echo $row["first_name"] . " ". $row["middle_name"] . " ".$row["last_name"]; ?> </td>
                         <td> <?php echo $row["enrollment_type"];?> </td>
                         <td> <?php echo $row["enrollment_date"];?> </td>
                         <td> <?php echo $row["grade_of_enrollment"];?> </td>
@@ -60,63 +61,90 @@
 
 <div class="modal" id="madd">
     <div class="modal-content">
+      <div class="modal-header">
         <span class="close">&times;</span>
         <h2 class="text-center">Add an Enrollment</h2>
-        <form class="form-horizontal" action="#">
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" method="post" action="modal-processing.php">
   <div class="form-group">
     <label class="control-label col-sm-2" for="enrollmentid">Enrollment ID:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="enrollmentid">
+      <input type="number" class="form-control" name="enrollmentid">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="studentid">Student ID:</label>
+    <div class="col-sm-4">
+      <input type="number" class="form-control" id="studentid">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="enrollmenttype">Enrollment Type:</label>
     <div class="col-sm-4"> 
-      <input type="text" class="form-control" id="enrollmenttype">
+    <select class="form-control" name="enrollmenttype">
+            <option value="First">First</option>
+            <option value="Re-enrollment">Re-enrollment</option>
+        </select>
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="enrollmentdate">Enrollment Date:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="enrollmentdate">
+      <input type="text" class="form-control" id="enrollmentdate" placeholder="use jQuery datepicker">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="grade">Grade:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="grade">
+      <select class="form-control" name="grade">
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+      </select>
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="catstatus">CAT Status:</label>
     <div class="col-sm-4">
-        <input type="text" class="form-control" id="catstatus">
+    <textarea rows="4" cols="50" class="form-control" name="catstatus"></textarea>
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="docsent">Documentation Sent:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="docsent">
+      <textarea rows="4" cols="50" class="form-control" name="docsent"></textarea>
     </div>
   </div>
-  <div class="form-group"> 
-    <div class="col-sm-offset-2 col-sm-4">
-      <button type="submit" class="btn btn-primary">Add </button>
+  <div class="modal-footer"> 
+      <input type="hidden" name="purpose" value="addenrollment">
+      <button type="submit" name="addenrollment" class="btn btn-primary">Add</button>
     </div>
-  </div>
 </form>
+                        </div>
     </div>
 </div>
 
 <div class="modal" id="mview">
     <div class="modal-content">
+      <div class="modal-header">
         <span class="close">&times;</span>
         <h2 class="text-center">Enrollment Details</h2>
+      </div>  
+    <div class="modal-body">
         <form class="form-horizontal" action="#">
   <div class="form-group">
     <label class="control-label col-sm-2" for="enrollmentid">Enrollment ID:</label>
     <div class="col-sm-4">
       <input type="text" class="form-control" id="enrollmentid">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="studentid">Student Name:</label>
+    <div class="col-sm-4">
+      <input type="number" class="form-control" id="studentid" value="id and student name">
     </div>
   </div>
   <div class="form-group">
@@ -149,57 +177,71 @@
       <input type="text" class="form-control" id="docsent">
     </div>
   </div>
-</form>
+                        </form>
+                        </div>
+  <div class="modal-footer"> 
+    <input type="hidden" name="purpose" value="viewstudent">
+    <button type="submit" data-dismiss="mview" class="btn btn-primary">Close</button>
+  </div>
     </div>
 </div>
 
 <div class="modal" id="medit">
     <div class="modal-content">
+      <div class="modal-header">
         <span class="close">&times;</span>
         <h2 class="text-center">Edit Enrollment</h2>
-        <form class="form-horizontal" action="#">
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" action="modal-processing.php">
   <div class="form-group">
     <label class="control-label col-sm-2" for="enrollmentid">Enrollment ID:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="enrollmentid">
+      <input readonly type="text" class="form-control" name="enrollmentid">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="studentid">Student ID:</label>
+    <div class="col-sm-4">
+      <input readonly type="number" class="form-control" name="studentid">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="enrollmenttype">Enrollment Type:</label>
     <div class="col-sm-4"> 
-      <input type="text" class="form-control" id="enrollmenttype">
+      <input type="text" class="form-control" name="enrollmenttype">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="enrollmentdate">Enrollment Date:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="enrollmentdate">
+      <input type="text" class="form-control" name="enrollmentdate">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="grade">Grade:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="grade">
+      <input type="text" class="form-control" name="grade">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="catstatus">CAT Status:</label>
     <div class="col-sm-4">
-        <input type="text" class="form-control" id="catstatus">
+        <input type="text" class="form-control" name="catstatus">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="docsent">Documentation Sent:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="docsent">
+      <input type="text" class="form-control" name="docsent">
     </div>
   </div>
-  <div class="form-group"> 
-    <div class="col-sm-offset-2 col-sm-4">
-      <button type="submit" class="btn btn-primary">Add </button>
-    </div>
+  <div class="modal-footer"> 
+    <input type="hidden" name="purpose" value="editstudent">
+    <button type="submit" name="editenrollment" class="btn btn-primary">Save Changes </button>
   </div>
-</form>
+  </form>
+  </div>
     </div>
 </div>
 
@@ -263,5 +305,3 @@
     }
 
 </script>
-    </div>        
-</div>

@@ -1,19 +1,3 @@
-<?php
- session_start();
- $userid = $_SESSION["user"];
- 
-    $file = "check.txt";
-    $text = file_get_contents($file);
-    $values = preg_split('/[\n,]+/', $text);
-
-    foreach($values as $value){
-        //echo $value;
-    }
-    
-    if($value == "No"){
-       header('location:installer.php');
-    }else{
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,4 +56,3 @@
         <div class="col-sm-4"></div>
     </div>
 </div>
-<?php } ?>

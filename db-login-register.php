@@ -6,7 +6,7 @@
 
     if ($form == "Register") {
         $fname= mysqli_real_escape_string($connection,$_POST["firstname"]);
-        $sname=mysqli_real_escape_string($connection,$_POST["lastname"]);
+        $lname=mysqli_real_escape_string($connection,$_POST["lastname"]);
         $ulevel=mysqli_real_escape_string($connection,$_POST["userlevel"]);
         $user=mysqli_real_escape_string($connection,$_POST["username"]);
         $passw=mysqli_real_escape_string($connection,$_POST["password"]);
@@ -44,21 +44,12 @@
             $row=mysqli_fetch_array($ret);
             if($row){
                 $validpass = password_verify($passw, $row['pswrd']);
-                if(!empty($_POST["remember"])){  
-                    setcookie ("username",$user,time()+ (10 * 365 * 24 * 60 * 60));  
-                    setcookie ("psword",$passw,time()+ (10 * 365 * 24 * 60 * 60));
-                    echo "Cookies Set Successfuly";
-                }else {
-                    setcookie("username","");
-                    setcookie("psword","");
-                    echo "Cookies Not Set";
-                }
                 $_SESSION["user"] = $row["user_id"];
-                $_SESSION["username"] = $row["username"]; 
-                $_SESSION["loggedin"] = true;
-                header('location:index.php');
+                $_SESSION["firstname"] = $row["first_name"]; 
+                $_SESSION["login"] = true;
+                header('location:index1.php?page=home');
             }else{
-                $_SESSION["loggedin"] = false;
+                $_SESSION["login"] = false;
                 header('location:login.php');
                 $_SESSION["attempts"] += 1;
                 if($_SESSION["attempts"] >= 3){

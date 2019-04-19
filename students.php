@@ -1,167 +1,153 @@
-    <?php
-        require_once ('includes/dbconnect.php');
-        $connection = db_connect();
-        session_start();
-        $userid = $_SESSION["user"];
-        $query= "SELECT * FROM students";
-        $ret = mysqli_query($connection, $query);
-        if(!$ret){
-           echo "Error" . mysqli_error($connection);
-        }
-        ?>
-    <div class="col-sm-10" id="source-html">
+<?php
+  require_once ('includes/dbconnect.php');
+  $connection = db_connect();
+  session_start();
+  $userid = $_SESSION["user"];
+  
+?>
+<div class="row">
+    <div class="col-sm-12">
     <br>
         <div class="well well-lg"> 
             <h1>Students</h1> 
-            <div class= "text-right"><button type="button" class="button btn btn-primary" data-modal="madd">Add a Student</button></div>
+            <div class= "text-right"><button type="button"  name="add" id="add" class="button btn btn-primary" >Add a Student</button></div>
         </div>
         <button type="button"  onclick="exportHTML();" class="btn btn-primary">Export to Microsoft Word</button>
 
-        <form class="navbar-form navbar-right" role="search">
+        <form class="navbar-form navbar-right" action="index1.php?page=students" method="post">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
+                <input type="text" name="valueToSearchstudents" id="valueToSearchstudents" class="form-control" placeholder="Search">
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" name="search" class="btn btn-default">Submit</button>
         </form>
-        
-        <div class="row">
-            <div class="col-sm-10">
+</div>
+</div>
+        <div class="row" id="source-html">
+            <div class="col-sm-12" id="result">
             <br>
-                <table border="1" class="table table-bordered">
-                    <tr>
-                        <th>Student ID</th>
-                        <th>First Name</th>
-                        <th>Middle Name</th>
-                        <th>Last Name</th>
-                        <th>Date of Birth</th>
-                        <th>Gender</th>
-                        <th>Enrollment Status</th>
-                        <th colspan="2">Commands</th>
-                    </tr>
-                    <?php
-                        while($row = mysqli_fetch_array($ret)){
-                    ?>
-                    <tr>
-                        <td><?php echo $row["student_id"]; ?></td>
-                        <td> <?php echo $row["first_name"]; ?> </td>
-                        <td> <?php echo $row["middle_name"]; ?> </td>
-                        <td> <?php echo $row["last_name"];?> </td>
-                        <td> <?php echo $row["date_of_birth"]; ?> </td>
-                        <td> <?php echo $row["gender"];?> </td>
-                        <td> <?php echo $row["enrollment_status"];?> </td>
-                        <td> <a href="index1.php?page=viewstudents?id=<?php echo $row['student_id']; ?>"><button type="button" class="btn btn-primary">View</button></a></td>
-                        <td> <button type="button" class="button btn btn-default" data-modal="medit">Edit</button> </td>
-                    </tr>
-                    <?php } ?>
-                </table>
+              
             </div>
         </div>
-<div class="modal" id="madd">
+
+<div class="modal" id="add_data_Modal">
     <div class="modal-content">
+      <div class="modal-header">
         <span class="close">&times;</span>
         <h2 class="text-center">Add a Student</h2>
-        <form class="form-horizontal" action="#">
+      </div>
+   <div class="modal-body">
+        <form class="form-horizontal" id="insert_form" method="post" >
   <div class="form-group">
-    <label class="control-label col-sm-2" for="studentid">Student ID:</label>
+    <label class="control-label col-sm-2" for="newid">Student ID:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="studentid">
+      <input type="number" class="form-control" id="newid" name="newid" required>
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="firstname">First Name:</label>
+    <label class="control-label col-sm-2" for="newfname">First Name:</label>
     <div class="col-sm-4"> 
-      <input type="text" class="form-control" id="firstname">
+      <input type="text" class="form-control" id="newfname" name="newfname" required>
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="lastname">Last Name:</label>
+    <label class="control-label col-sm-2" for="newmidname">Middle Name:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="lastname">
+      <input type="text" class="form-control" id="newmidname" name="newmidname">
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="dob">Date of Birth:</label>
+    <label class="control-label col-sm-2" for="newlname">Last Name:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="dob" placeholder="YYYY-MM-DD">
+      <input type="text" class="form-control" name="newlname" name="newlname" required>
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="gender">Gender:</label>
+    <label class="control-label col-sm-2" for="newdob">Date of Birth:</label>
     <div class="col-sm-4">
-        <select class="form-control" name="gender">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+      <input type="text" class="form-control" id="newdob" name="newdob" required placeholder=" use jQuery datepicker YYYY-MM-DD">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="newgender">Gender:</label>
+    <div class="col-sm-4">
+        <select class="form-control" required id="newgender" name="newgender">
+            <option name="gender" value="Male">Male</option>
+            <option name="gender" value="Female">Female</option>
         </select>
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="enrollmentstat">Enrollment Status:</label>
+    <label class="control-label col-sm-2" for="newenrollmentstat">Enrollment Status:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="enrollmentstat">
-    </div>
-  </div>
-  <div class="form-group"> 
-    <div class="col-sm-offset-2 col-sm-4">
-      <button type="submit" class="btn btn-primary">Add </button>
-    </div>
-  </div>
-</form>
-    </div>
-</div>
-
-<div class="modal" id="medit">
-<div class="modal-content">
-        <span class="close">&times;</span>
-        <h2 class="text-center">Edit Student Details</h2>
-        <form class="form-horizontal" action="#">
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="studentid">Student ID:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="studentid">
+      <select class="form-control" required id="newenrollmentstat" name="newenrollmentstat"> 
+            <option name="enrollmentstat" value="Enrolled">Enrolled</option>
+            <option name="enrollmentstat" value="Not enrolled">Not enrolled</option>
+            <option name="enrollmentstat" value="Enrollment Pending">Enrollment Pending</option>
+      </select>
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="firstname">First Name:</label>
-    <div class="col-sm-4"> 
-      <input type="text" class="form-control" id="firstname">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="lastname">Last Name:</label>
+    <label class="control-label col-sm-2" for="newstudenttype">Student Type:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="lastname">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="dob">Date of Birth:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="dob" placeholder="YYYY-MM-DD">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="gender">Gender:</label>
-    <div class="col-sm-4">
-        <select class="form-control" name="gender">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+      <select class="form-control" required id="newstudenttype" name="newstudenttype">
+            <option name="studenttype" value="Current">Current</option>
+            <option name="studenttype" value="Past">Past</option>
         </select>
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="enrollmentstat">Enrollment Status:</label>
+    <label class="control-label col-sm-2" for="newdod">Date of departure:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="enrollmentstat">
+      <input type="text" id="newdod" name="newdod" class="form-control" placehoolder="use jQuery datepicker YYYY-MM-DD"/>
     </div>
   </div>
-  <div class="form-group"> 
-    <div class="col-sm-offset-2 col-sm-4">
-      <button type="submit" class="btn btn-primary">Save Changes</button>
-    </div>
+  <div class="modal-footer">
+    <input type="hidden" name="student_id" value="student_id">
+    <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-primary">
   </div>
 </form>
+                        </div>
     </div>
 </div>
 
+<script>
+$(document).ready(function(){
+  $('#add').click(function(){  
+           $('#insert').val("Insert");  
+           $('#insert_form')[0].reset();  
+      });  
+      $('#insert_form').on("submit", function(event){  
+                $.ajax({  
+                     url:"insert.php",  
+                     method:"POST",  
+                     data:$('#insert_form').serialize(),  
+                     beforeSend:function(){  
+                          $('#insert').val("Inserting");  
+                     },  
+                     success:function(data){  
+                          $('#insert_form')[0].reset();  
+                          $('#add_data_Modal').modal('hide');  
+                          $('#student_table').html(data);  
+                     }  
+                });  
+      }); 
+});
+
+</script>
+
+<script>
+function saveToDatabase(editableObj,column,id) {
+	$(editableObj).css("background","#FFF url(Images/loader.gif) no-repeat right");
+	$.ajax({
+		url: "saveInlineEdit.php",
+		type: "POST",
+		data:'column='+column+'&editval='+editableObj.innerHTML+'&id='+id,
+		success: function(data){
+			$(editableObj).css("background","#FDFDFD");
+		}        
+   });
+}
+</script>
 
 <script>
     function exportHTML(){
@@ -182,6 +168,8 @@
     }
 </script>
 
+
+
 <script>
     var modal = document.getElementsByClassName("modal");
     var button = document.getElementsByClassName("button");
@@ -194,28 +182,48 @@
         modal[0].style.display = "none";
     }
 
-    button[1].onclick = function() {
-        modal[1].style.display = "block";
-    }
-    span[1].onclick = function() {
-        modal[1].style.display = "none";
-    }
-
     window.onclick = function(event) {
         if(event.target == modal[0]) {
             modal[0].style.display = "none";
         }
-        if(event.target == modal[1]) {
-            modal[1].style.display = "none";
-        }
+       
     }
-
+    
 </script>
 
 
-    </div>        
-</div>
 
+<script>
+$(document).ready(function(){
+
+ load_data();
+
+ function load_data(query)
+ {
+  $.ajax({
+   url:"fetch.php",
+   method:"POST",
+   data:{query:query},
+   success:function(data)
+   {
+    $('#result').html(data);
+   }
+  });
+ }
+ $('#valueToSearchstudents').keyup(function(){
+  var search = $(this).val();
+  if(search != '')
+  {
+   load_data(search);
+  }
+  else
+  {
+   load_data();
+  }
+ });
+  
+});
+</script>
 
 
 

@@ -1,15 +1,27 @@
+<?php
+ session_start();
+ $userid = $_SESSION["user"];
+ 
+    $file = "check.txt";
+    $text = file_get_contents($file);
+    $values = preg_split('/[\n,]+/', $text);
 
-<?php 
-include ('includes/header.php');
-?>
+    foreach($values as $value){
+        //echo $value;
+    }
+    
+    if($value == "No"){
+       header('location:installer.php');
+    }else{
+        if($_SESSION["login"] = true){
+            header("location:login.php");
+        }else{
+            header("location:index1.php?page=home");
+        }
+    }
 
-        <div class="col-sm-6">
-            <p>This is where all notifications will appear. Use badhes from bootstrap to help. Also get help from myaccount.php in DW Assignment.</p>
-        </div>
-    </div>        
-</div>
 
 
-<?php include ('includes/footer.php')?> 
+
         
    

@@ -7,10 +7,10 @@ session_start();
 include ('includes/header.php');
 switch (@$page){
     case "":
-        include ("index.php");
+        include ("home.php");
         break;
-    case "index":
-        include ("index.php");
+    case "home":
+        include ("home.php");
         break;
     case "students":
         include ("students.php");
@@ -23,9 +23,6 @@ switch (@$page){
         break; 
     case "courses":
         include ("courses.php");
-        break;
-    case "viewstudents":
-        include ("viewstudents.php");
         break;
 }   
 

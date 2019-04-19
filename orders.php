@@ -3,14 +3,21 @@
         $connection = db_connect();
         session_start();
         $userid = $_SESSION["user"];
-        $query= "SELECT * FROM orders";
+        $query= "SELECT orders.order_number, orders.enrollment_id, orders.order_details, orders.amount_paid, orders.shipping_details, orders.delivery_status, students.first_name, students.middle_name, students.last_name FROM orders, students, enrollments WHERE orders.enrollment_id = enrollments.enrollment_id and enrollments.student_id = students.student_id";
         $ret = mysqli_query($connection, $query);
         if(!$ret){
            echo "Error" . mysqli_error($connection);
         }
+        $row = mysqli_fetch_array($ret);
+        $query2 = "SELECT * FROM uploads";
+        $ret2 = mysqli_query($connection, $query);
+        if(!$ret2){
+          echo "Error" . mysqli_error($connection);
+        }
+      $row2 = mysqli_fetch_array($ret2);
 ?>
-
-<div class="col-sm-10">
+<div class="row">
+<div class="col-sm-12">
 <br>
         <div class="well well-lg"> 
             <h1>Orders</h1> 
@@ -24,34 +31,33 @@
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
-
-        <div class="row">
-            <div class="col-sm-10">
+</div>
+</div>
+        <div class="row" id="source-html">
+            <div class="col-sm-12">
             <br>
                 <table border="1" class="table table-bordered">
                     <tr>
                         <th>Order Number</th>
                         <th>Enrollment ID</th>
+                        <th>Student Name</th>
                         <th>Order Details</th>
                         <th>Amount Paid</th>
                         <th>Shipping Details</th>
                         <th>Delivery Status</th>
                         <th colspan="2">Commands</th>
                     </tr>
-                    <?php
-                        while($row = mysqli_fetch_array($ret)){
-                    ?>
                     <tr>
                         <td><?php echo $row["order_number"]; ?></a></td>
                         <td> <?php echo $row["enrollment_id"]; ?> </td>
-                        <td> <?php echo $row["order_details"];?> </td>
-                        <td> <?php echo $row["amount_paid"];?> </td>
+                        <td> <?php echo $row["first_name"] . " ". $row["middle_name"] . " ".$row["last_name"]; ?> </td>
+                        <td> <a href="uploads/<?php echo $row['order_details'];?>" target="_blank"><?php echo $row["order_details"];?> </a></td>
+                        <td> <?php echo $row2["amount_paid"];?> </td>
                         <td> <?php echo $row["shipping_details"];?> </td>
                         <td> <?php echo $row["delivery_status"];?> </td>
                         <td> <button type="button" data-modal="mview" class="button btn btn-primary">View</button></td>
                         <td> <button type="button" data-modal="medit" class="button btn btn-default">Edit</button> </td>
                     </tr>
-                    <?php } ?>
                 </table>
             </div>
         </div>
@@ -59,59 +65,65 @@
 
 <div class="modal" id="madd">
     <div class="modal-content">
+      <div class="modal-header">
         <span class="close">&times;</span>
         <h2 class="text-center">Add an Order</h2>
-        <form class="form-horizontal" action="#">
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="upload.php">
   <div class="form-group">
     <label class="control-label col-sm-2" for="ordernum">Order Number:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="ordernum">
+      <input type="number" class="form-control" name= "ordernum" id="ordernum">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="enrollmentid">Enrollment ID:</label>
     <div class="col-sm-4"> 
-      <input type="text" class="form-control" id="enrollmentid">
+      <input type="number" class="form-control" name="enrollmentid">
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="orderdetails">Order Details:</label>
+    <label class="control-label col-sm-2" for="file">Order Details:</label>
     <div class="col-sm-4">
-      <input type="file" class="form-control" id="orderdetails">
+      <input type="file" class="form-control" name="file" id="file">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="amountpaid">Amount Paid:</label>
     <div class="col-sm-4">
-      <input type="number" class="form-control" id="amountpaid">
+      <input type="text"  class="form-control" name="amountpaid">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="shipdetails">Shipping Details:</label>
     <div class="col-sm-4">
-        <input type="text" class="form-control" id="shipdetails">
+      <textarea rows="4" cols="50" class="form-control" name="shipdetails"></textarea>
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="deliverystat">Delivery Status:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="deliverystat">
+      <textarea rows="4" cols="50" class="form-control" name="deliverystat"></textarea>
     </div>
   </div>
-  <div class="form-group"> 
-    <div class="col-sm-offset-2 col-sm-4">
-      <button type="submit" class="btn btn-primary">Add </button>
-    </div>
+  <div class="modal-footer">
+    <input type="hidden" name="purpose" value="addorder">
+    <button type="submit" name= "btn-add-order" class="btn btn-primary">Add </button>
   </div>
 </form>
+      </div>
     </div>
 </div>
 
 <div class="modal" id="mview">
     <div class="modal-content">
-        <span class="close">&times;</span>
+      <div class="modal-header">
+        <button data-dismiss="modal" class="close">&times;</button>
         <h2 class="text-center">Order Details</h2>
-        <form class="form-horizontal" action="#">
+      </div>
+      <div class="modal-body">
+    <form class="form-horizontal" method="POST" action="#">
   <div class="form-group">
     <label class="control-label col-sm-2" for="ordernum">Order Number:</label>
     <div class="col-sm-4">
@@ -148,57 +160,65 @@
       <input type="text" class="form-control" id="deliverystat">
     </div>
   </div>
+  <div class="modal-footer"> 
+  <input type="hidden" name="purpose" value="vieworder">
+    <button type="submit" data-dismiss="mview" class="btn btn-primary">Close</button>
+  </div>
 </form>
+      </div>
     </div>
 </div>
 
 <div class="modal" id="medit">
     <div class="modal-content">
+      <div class="modal-header">
         <span class="close">&times;</span>
         <h2 class="text-center">Edit Order</h2>
-        <form class="form-horizontal" action="#">
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="modal-processing.php">
   <div class="form-group">
     <label class="control-label col-sm-2" for="ordernum">Order Number:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="ordernum">
+      <input type="text" readonly class="form-control" id="ordernum">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="enrollmentid">Enrollment ID:</label>
     <div class="col-sm-4"> 
-      <input type="text" class="form-control" id="enrollmentid">
+      <input readonly type="text" class="form-control" id="enrollmentid">
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="orderdetails">Order Details:</label>
+    <label class="control-label col-sm-2" for="file">Order Details:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="orderdetails">
+      <input type="file" class="form-control" name="file" id="file">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="amountpaid">Amount Paid:</label>
     <div class="col-sm-4">
-      <input type="number" class="form-control" id="amountpaid">
+      <input type="number" class="form-control" name="amountpaid">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="shipdetails">Shipping Details:</label>
     <div class="col-sm-4">
-        <input type="text" class="form-control" id="shipdetails">
+        <input type="text" class="form-control" name="shipdetails">
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="deliverystat">Delivery Status:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="deliverystat">
+      <input type="text" class="form-control" name="deliverystat">
     </div>
   </div>
-  <div class="form-group"> 
-    <div class="col-sm-offset-2 col-sm-4">
-      <button type="submit" class="btn btn-primary">Save Changes</button>
-    </div>
+  <div class="modal-footer"> 
+    <input type="hidden" name="purpose" value="editorder">
+    <button type="submit" name="editorder" class="btn btn-primary">Save Changes</button>
   </div>
 </form>
+      </div>
     </div>
 </div>
 
