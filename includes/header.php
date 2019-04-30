@@ -3,7 +3,7 @@ session_start();
     @$page = $_GET["page"];
     switch(@$page){
         case "":
-            $home = "class='active'";
+            $home = "";
             $students = "";
             $enrollments = "";
             $orders = "";
@@ -86,13 +86,17 @@ session_start();
                         }   
                         ?>  </a>
                         <ul class="dropdown-menu">
+                            <?php if($_SESSION["level"] == "User"){ ?> 
                             <li><a href="myaccount.php">My Account</a></li>
                             <li><a href="signout.php">Sign Out</a></li>
-                            <li><a href="login.php">Login</a></li>
+                       <?php }else{ ?> 
+                            <li><a href="myaccount.php">My Account</a></li>
                             <li><a href="br.php">Backup and Restore</a></li>
+                            <li><a href="signout.php">Sign Out</a></li>
+                        <?php } ?>
                         </ul>
                         </li></a></li>
-                        <li><a href="index.php"><span class="glyphicon glyphicon-bell"></span> Notifications</a></li>
+                        <li><a href="index1.php?page=home#notifications"><span class="glyphicon glyphicon-bell"></span> Notifications</a></li>
                     </ul>
             </div>
         </div>

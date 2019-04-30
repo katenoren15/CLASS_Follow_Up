@@ -21,44 +21,37 @@
 <br>
         <div class="well well-lg"> 
             <h1>Orders</h1> 
-            <div class= "text-right"><button type="button" class="button btn btn-primary">Add an Order</button></div>
+            <?php if($_SESSION["level"] == 'Administrator'){?>
+              <div class= "text-right"><button type="button" class="button btn btn-primary">Add an Order</button></div>
+            <?php } ?> 
         </div>
         <button type="button" onclick="exportHTML();" class="btn btn-primary">Export to Microsoft Word</button>
 
-        <form class="navbar-form navbar-right" role="search">
+        <form class="navbar-form navbar-right">
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
+            <input type="text" name="valueToSearchorders" id="valueToSearchorders" class="form-control" placeholder="Search">
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
 </div>
 </div>
+<div class="row">
+  <div class="col-sm-6">
+    <br>
+    <div class="col-sm-3" for="filtercourse">Filter Data By:</div><select class="col-sm-3" id="fetchval" name="filtercourse">
+      <option value="order_number">Order Number</option>
+      <option value="enrollment_id">Enrollment ID</option>
+      <option value="order_details">Order Details</option>
+      <option value="amount_paid">Amount Paid</option>
+      <option value="shipping_details">Shipping Details</option>
+      <option value="delivery_status">Delivery Status</option>
+    </select>    <br><br>  
+  </div>
+</div>
         <div class="row" id="source-html">
-            <div class="col-sm-12">
+            <div class="col-sm-12" id="result">
             <br>
-                <table border="1" class="table table-bordered">
-                    <tr>
-                        <th>Order Number</th>
-                        <th>Enrollment ID</th>
-                        <th>Student Name</th>
-                        <th>Order Details</th>
-                        <th>Amount Paid</th>
-                        <th>Shipping Details</th>
-                        <th>Delivery Status</th>
-                        <th colspan="2">Commands</th>
-                    </tr>
-                    <tr>
-                        <td><?php echo $row["order_number"]; ?></a></td>
-                        <td> <?php echo $row["enrollment_id"]; ?> </td>
-                        <td> <?php echo $row["first_name"] . " ". $row["middle_name"] . " ".$row["last_name"]; ?> </td>
-                        <td> <a href="uploads/<?php echo $row['order_details'];?>" target="_blank"><?php echo $row["order_details"];?> </a></td>
-                        <td> <?php echo $row2["amount_paid"];?> </td>
-                        <td> <?php echo $row["shipping_details"];?> </td>
-                        <td> <?php echo $row["delivery_status"];?> </td>
-                        <td> <button type="button" data-modal="mview" class="button btn btn-primary">View</button></td>
-                        <td> <button type="button" data-modal="medit" class="button btn btn-default">Edit</button> </td>
-                    </tr>
-                </table>
+                
             </div>
         </div>
 
@@ -74,25 +67,25 @@
   <div class="form-group">
     <label class="control-label col-sm-2" for="ordernum">Order Number:</label>
     <div class="col-sm-4">
-      <input type="number" class="form-control" name= "ordernum" id="ordernum">
+      <input type="number" class="form-control" name= "ordernum" id="ordernum" required>
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="enrollmentid">Enrollment ID:</label>
     <div class="col-sm-4"> 
-      <input type="number" class="form-control" name="enrollmentid">
+      <input type="number" class="form-control" name="enrollmentid" required>
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="file">Order Details:</label>
     <div class="col-sm-4">
-      <input type="file" class="form-control" name="file" id="file">
+      <input type="file" class="form-control" name="file" id="file" required>
     </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="amountpaid">Amount Paid:</label>
     <div class="col-sm-4">
-      <input type="text"  class="form-control" name="amountpaid">
+      <input type="text"  class="form-control" name="amountpaid" required>
     </div>
   </div>
   <div class="form-group">
@@ -116,111 +109,6 @@
     </div>
 </div>
 
-<div class="modal" id="mview">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button data-dismiss="modal" class="close">&times;</button>
-        <h2 class="text-center">Order Details</h2>
-      </div>
-      <div class="modal-body">
-    <form class="form-horizontal" method="POST" action="#">
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="ordernum">Order Number:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="ordernum">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="enrollmentid">Enrollment ID:</label>
-    <div class="col-sm-4"> 
-      <input type="text" class="form-control" id="enrollmentid">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="orderdetails">Order Details:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="orderdetails">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="amountpaid">Amount Paid:</label>
-    <div class="col-sm-4">
-      <input type="number" class="form-control" id="amountpaid">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="shipdetails">Shipping Details:</label>
-    <div class="col-sm-4">
-        <input type="text" class="form-control" id="shipdetails">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="deliverystat">Delivery Status:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" id="deliverystat">
-    </div>
-  </div>
-  <div class="modal-footer"> 
-  <input type="hidden" name="purpose" value="vieworder">
-    <button type="submit" data-dismiss="mview" class="btn btn-primary">Close</button>
-  </div>
-</form>
-      </div>
-    </div>
-</div>
-
-<div class="modal" id="medit">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="close">&times;</span>
-        <h2 class="text-center">Edit Order</h2>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="modal-processing.php">
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="ordernum">Order Number:</label>
-    <div class="col-sm-4">
-      <input type="text" readonly class="form-control" id="ordernum">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="enrollmentid">Enrollment ID:</label>
-    <div class="col-sm-4"> 
-      <input readonly type="text" class="form-control" id="enrollmentid">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="file">Order Details:</label>
-    <div class="col-sm-4">
-      <input type="file" class="form-control" name="file" id="file">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="amountpaid">Amount Paid:</label>
-    <div class="col-sm-4">
-      <input type="number" class="form-control" name="amountpaid">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="shipdetails">Shipping Details:</label>
-    <div class="col-sm-4">
-        <input type="text" class="form-control" name="shipdetails">
-    </div>
-  </div>
-  <div class="form-group">
-    <label class="control-label col-sm-2" for="deliverystat">Delivery Status:</label>
-    <div class="col-sm-4">
-      <input type="text" class="form-control" name="deliverystat">
-    </div>
-  </div>
-  <div class="modal-footer"> 
-    <input type="hidden" name="purpose" value="editorder">
-    <button type="submit" name="editorder" class="btn btn-primary">Save Changes</button>
-  </div>
-</form>
-      </div>
-    </div>
-</div>
 
 <script>
     function exportHTML(){
@@ -253,32 +141,67 @@
         modal[0].style.display = "none";
     }
 
-    button[1].onclick = function() {
-        modal[1].style.display = "block";
-    }
-    span[1].onclick = function() {
-        modal[1].style.display = "none";
-    }
-
-    button[2].onclick = function() {
-        modal[2].style.display = "block";
-    }
-    span[2].onclick = function() {
-        modal[2].style.display = "none";
-    }
-
     window.onclick = function(event) {
         if(event.target == modal[0]) {
             modal[0].style.display = "none";
         }
-        if(event.target == modal[1]) {
-            modal[1].style.display = "none";
-        }
-        if(event.target == modal[2]) {
-            modal[2].style.display = "none";
-        }
     }
 
+</script>
+
+<script>
+  $(document).ready(function(){
+      $("#fetchval").on('change', function(){
+          var value = $(this).val();
+          $.ajax({
+              url:"fetch-order.php",
+              method:"POST",
+              data:"request="+value,
+              beforeSend:function(){
+                  $("#result").html("Filtering...");
+              },
+              success:function(data){
+                  $("#result").html(data);
+              },
+
+          });
+      });
+  });
+</script>
+
+<script>
+$(document).ready(function(){
+
+ load_data();
+
+ function load_data(query)
+ {
+  $.ajax({
+   url:"fetch-order.php",
+   method:"POST",
+   data:{query:query},
+   beforeSend:function(){  
+                          $('#result').html("Fetching Data...");  
+                     },  
+   success:function(data)
+   {
+    $('#result').html(data);
+   }
+  });
+ }
+ $('#valueToSearchorders').keyup(function(){
+  var search = $(this).val();
+  if(search != '')
+  {
+   load_data(search);
+  }
+  else
+  {
+   load_data();
+  }
+ });
+  
+});
 </script>
     </div>        
 </div>

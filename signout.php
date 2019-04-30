@@ -1,7 +1,6 @@
 <?php
     session_start();
     unset($_SESSION["login"]);
-    setcookie ("username",$user,time()- (10 * 365 * 24 * 60 * 60));  
-    setcookie ("psword",$passw,time()- (10 * 365 * 24 * 60 * 60));
+    unset($_SESSION["firstname"]);
     header('location:login.php');
 ?>

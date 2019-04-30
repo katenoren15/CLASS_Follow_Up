@@ -1,9 +1,16 @@
-  <?php
+<?php
+    session_start(); 
 
     $host = $_POST["localhost"];
     $dbuser = $_POST["dbuser"];
     $dbpass = $_POST["dbpass"];
     $database = $_POST["database"]; 
+
+    $_SESSION["localhost"] = $host;
+    $_SESSION["dbuser"] = $dbuser;
+    $_SESSION["dbpass"] = $dbpass;
+    $_SESSION["database"] = $database;
+
 
     $connection = mysqli_connect($host, $dbuser, $dbpass, $database);
     
@@ -20,7 +27,6 @@
         file_put_contents($file1,"pass = " . $current1["pass"]. "\r\n", FILE_APPEND);
         file_put_contents($file1, "dbname = " . $current1["dbname"]. "\r\n", FILE_APPEND);
     
-
 
 if ($connection->connect_error) {
     die("Connection failed: " . $connection->connect_error);
@@ -52,4 +58,7 @@ if(file_put_contents($file, $current)){
     header('location:login.php');
 }
 
+
+
 ?>
+

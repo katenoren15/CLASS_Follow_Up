@@ -8,11 +8,46 @@ $userid = $_SESSION["user"];
 $query = "SELECT * FROM users WHERE user_id" . "= \"$userid\"";
  $ret = mysqli_query($connection, $query);
  $row = mysqli_fetch_array($ret);
-            if($row){
-                $validpass = password_verify($passw, $row['pswrd']);
-            }
 ?>
+</div>
+<?php
+$change = $_POST["form"];
 
+if($change == "user"){
+    if(isset($_POST["newuser"])){
+        $user = mysqli_real_escape_string($connection,$_POST["newuser"]);
+        $query= "UPDATE users SET username='$user' WHERE user_id=\"$userid\"";
+        $ret = mysqli_query($connection, $query);
+        if($ret){
+            header("location:myaccount.php");
+            echo "<div class='alert alert-success alert-dismissible'>
+            <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Change successful.</div>";
+        }else{
+            echo "<div class='alert alert-danger' role='alert'>Error" . mysqli_error($connection) ."</div>";
+        }
+    }
+}else{
+    if(isset($_POST["newpass"])){
+        $currpass = mysqli_real_escape_string($connection,$_POST["currpass"]);
+        $validpass = password_verify($currpass, $row['pswrd']);
+        if($validpass){
+            $newpass = mysqli_real_escape_string($connection,$_POST["newpass"]);
+            $hashpass = password_hash($newpass, PASSWORD_BCRYPT);
+            $query= "UPDATE users SET pswrd='$hashpass' WHERE user_id=\"$userid\"";
+            $ret = mysqli_query($connection, $query);
+            if($ret){
+                header("location:myaccount.php");
+                echo "<div class='alert alert-success alert-dismissible'>
+                <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Change successful.</div>";
+            }else{
+                echo "<div class='alert alert-danger' role='alert'>Error" . mysqli_error($connection) ."</div>";
+            }
+        }
+        
+    }
+}
+
+?>
 
 
 <div class="col-sm-12" id="details">
@@ -45,7 +80,6 @@ $query = "SELECT * FROM users WHERE user_id" . "= \"$userid\"";
                     </tr>
                     <tr>
                         <td>Password:</td>
-                        <td><?php echo preg_replace("/./", "*", $row["pswrd"])?></td>
                         <td><button class="button btn btn-default" data-modal="mpass">Change</button></td>
                     </tr>
                 </table>
@@ -85,11 +119,17 @@ $query = "SELECT * FROM users WHERE user_id" . "= \"$userid\"";
         <div class="modal-body">   
             <form class="form-horizontal" method="post" action="#">
                 <div class="form-group">
+                    <label class="control-label col-sm-2" for="currpass">Enter current password:</label>
+                    <div class="col-sm-4">
+                        <input type="password" class="form-control" name="currpass" >
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="control-label col-sm-2" for="newpass">Enter new password:</label>
                     <div class="col-sm-4">
                         <input type="password" class="form-control" name="newpass" required="required">
                     </div>
-                </div>    
+                </div>      
                 <div class="modal-footer">
                     <input type="hidden" name="form" value="pass">
                     <input type="submit" class="btn btn-primary" value="Save">
@@ -97,38 +137,7 @@ $query = "SELECT * FROM users WHERE user_id" . "= \"$userid\"";
             </form>
        </div>
     </div>
-</div>
-<?php
-$change = $_POST["form"];
 
-if($change == "user"){
-    if(isset($_POST["newuser"])){
-        $user = mysqli_real_escape_string($connection,$_POST["newuser"]);
-        $query= "UPDATE users SET username='$user' WHERE user_id=\"$userid\"";
-        $ret = mysqli_query($connection, $query);
-        if($ret){
-            echo "<div class='alert alert-success alert-dismissible'>
-            <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Change successful.</div>";
-        }else{
-            echo "<div class='alert alert-danger' role='alert'>Error" . mysqli_error($connection) ."</div>";
-        }
-    }
-}else{
-    if(isset($_POST["newpass"])){
-        
-        $pass = mysqli_real_escape_string($connection,$_POST["newpass"]);
-        $query= "UPDATE users SET pswrd='$pass' WHERE user_id=\"$userid\"";
-        $ret = mysqli_query($connection, $query);
-        if($ret){
-            echo "<div class='alert alert-success alert-dismissible'>
-            <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Change successful.</div>";
-        }else{
-            echo "<div class='alert alert-danger' role='alert'>Error" . mysqli_error($connection) ."</div>";
-        }
-    }
-}
-
-?>
 <script>
 
     var modal = document.getElementsByClassName("modal");

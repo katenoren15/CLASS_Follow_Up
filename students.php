@@ -3,6 +3,8 @@
   $connection = db_connect();
   session_start();
   $userid = $_SESSION["user"];
+ 
+    
   
 ?>
 <div class="row">
@@ -10,7 +12,9 @@
     <br>
         <div class="well well-lg"> 
             <h1>Students</h1> 
+            <?php if($_SESSION["level"] == 'Administrator'){?>
             <div class= "text-right"><button type="button"  name="add" id="add" class="button btn btn-primary" >Add a Student</button></div>
+            <?php } ?>
         </div>
         <button type="button"  onclick="exportHTML();" class="btn btn-primary">Export to Microsoft Word</button>
 
@@ -22,10 +26,27 @@
         </form>
 </div>
 </div>
+<div class="row">
+  <div class="col-sm-6">
+    <br>
+    <div class="col-sm-3" for="filtercourse">Filter Data By:</div><select class="col-sm-3" id="fetchval" name="filterstudent">
+      <option value="student_id">Student ID</option>
+      <option value="first_name">First Name</option>
+      <option value="middle_name">Middle Name</option>
+      <option value="last_name">Last Name</option>
+      <option value="date_of_birth">Date of Birth</option>
+      <option value="gender">Gender</option>
+      <option value="enrollment_status">Enrollment Status</option>
+      <option value="student_type">Current of Past</option>
+      <option value="date_of_departure">Date of Departure</option>
+    </select>    <br><br>  
+  </div>
+</div>
         <div class="row" id="source-html">
             <div class="col-sm-12" id="result">
             <br>
-              
+            <span></span>
+              <form><input type="hidden" name="type" value="student"></form>
             </div>
         </div>
 
@@ -58,7 +79,7 @@
   <div class="form-group">
     <label class="control-label col-sm-2" for="newlname">Last Name:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" name="newlname" name="newlname" required>
+      <input type="text" class="form-control" id="newlname" name="newlname" required>
     </div>
   </div>
   <div class="form-group">
@@ -102,14 +123,34 @@
     </div>
   </div>
   <div class="modal-footer">
-    <input type="hidden" name="student_id" value="student_id">
+    <input type="hidden" name="student_id" id="student_id" />
+    <input type="hidden" name="purpose" value="addstudent">
     <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-primary">
   </div>
 </form>
                         </div>
     </div>
-</div>
 
+    <script>
+    var modal = document.getElementsByClassName("modal");
+    var button = document.getElementsByClassName("button");
+    var span = document.getElementsByClassName("close");
+
+    button[0].onclick = function() {
+        modal[0].style.display = "block";
+    }
+    span[0].onclick = function() {
+        modal[0].style.display = "none";
+    }
+
+    
+    window.onclick = function(event) {
+        if(event.target == modal[0]) {
+            modal[0].style.display = "none";
+        }
+    }
+    
+</script>
 <script>
 $(document).ready(function(){
   $('#add').click(function(){  
@@ -127,7 +168,8 @@ $(document).ready(function(){
                      success:function(data){  
                           $('#insert_form')[0].reset();  
                           $('#add_data_Modal').modal('hide');  
-                          $('#student_table').html(data);  
+                          $('#student_table').html(data);
+                          alert("Data Inserted!");  
                      }  
                 });  
       }); 
@@ -135,20 +177,8 @@ $(document).ready(function(){
 
 </script>
 
-<script>
-function saveToDatabase(editableObj,column,id) {
-	$(editableObj).css("background","#FFF url(Images/loader.gif) no-repeat right");
-	$.ajax({
-		url: "saveInlineEdit.php",
-		type: "POST",
-		data:'column='+column+'&editval='+editableObj.innerHTML+'&id='+id,
-		success: function(data){
-			$(editableObj).css("background","#FDFDFD");
-		}        
-   });
-}
-</script>
 
+    
 <script>
     function exportHTML(){
        var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
@@ -167,30 +197,25 @@ function saveToDatabase(editableObj,column,id) {
        document.body.removeChild(fileDownload);
     }
 </script>
-
-
-
 <script>
-    var modal = document.getElementsByClassName("modal");
-    var button = document.getElementsByClassName("button");
-    var span = document.getElementsByClassName("close");
+  $(document).ready(function(){
+      $("#fetchval").on('change', function(){
+          var value = $(this).val();
+          $.ajax({
+              url:"fetch.php",
+              method:"POST",
+              data:"request="+value,
+              beforeSend:function(){
+                  $("#result").html("Filtering...");
+              },
+              success:function(data){
+                  $("#result").html(data);
+              },
 
-    button[0].onclick = function() {
-        modal[0].style.display = "block";
-    }
-    span[0].onclick = function() {
-        modal[0].style.display = "none";
-    }
-
-    window.onclick = function(event) {
-        if(event.target == modal[0]) {
-            modal[0].style.display = "none";
-        }
-       
-    }
-    
+          });
+      });
+  });
 </script>
-
 
 
 <script>
@@ -204,6 +229,9 @@ $(document).ready(function(){
    url:"fetch.php",
    method:"POST",
    data:{query:query},
+   beforeSend:function(){  
+                          $('#result').html("Fetching Data...");  
+                     },  
    success:function(data)
    {
     $('#result').html(data);

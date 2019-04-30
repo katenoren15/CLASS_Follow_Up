@@ -39,11 +39,6 @@
                 <hr>
                 <h3 class="text-center">Account Credentials</h3>
                 <div class="form-group">
-                    <label for="userlevel">User Level: </label>
-                    <label class="radio-inline"><input type="radio" value="Administrator" name="userlevel"/>Administrator</label>
-                    <label class="radio-inline"><input type="radio" value="User" name="userlevel"/>User</label>
-                </div>
-                <div class="form-group">
                 <label for="firstname">Username:</label><input class="form-control " type="text" required  name="username"/>
                 </div>
                 <div class="form-group">

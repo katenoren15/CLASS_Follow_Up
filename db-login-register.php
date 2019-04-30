@@ -7,7 +7,6 @@
     if ($form == "Register") {
         $fname= mysqli_real_escape_string($connection,$_POST["firstname"]);
         $lname=mysqli_real_escape_string($connection,$_POST["lastname"]);
-        $ulevel=mysqli_real_escape_string($connection,$_POST["userlevel"]);
         $user=mysqli_real_escape_string($connection,$_POST["username"]);
         $passw=mysqli_real_escape_string($connection,$_POST["password"]);
         $hashpass = password_hash($passw, PASSWORD_BCRYPT);
@@ -25,16 +24,42 @@
             }
         }
         if($found==0){
-            $query="INSERT INTO users(first_name, last_name, user_level, username, pswrd) 
-            VALUES ('$fname', '$lname', '$ulevel', '$user', '$hashpass')";
-            $ret1= mysqli_query($connection,$query);
-            if($ret1){ 
-                    echo "<p>Account created! You can now <a href='login.php'>sign in</a></p>";
+            if(isset($_POST["user_level"])){
+                $ulevel = mysqli_real_escape_string($connection, $_POST["user_level"]);
+                $query="INSERT INTO users(first_name, last_name, user_level, username, pswrd) 
+                        VALUES ('$fname', '$lname', '$ulevel', '$user', '$hashpass')";
+                 $ret1= mysqli_query($connection,$query);
+                 if($ret1){ 
+                     $last_id = mysqli_insert_id($connection);
+                     $_SESSION["user"] = $last_id;
+                     $query2 = "SELECT * FROM users WHERE user_id" . "= \"$last_id\"";
+                     $result = mysqli_query($connection, $query2);
+                     $row = mysqli_fetch_array($result);
+                     $_SESSION["firstname"] = $row["first_name"]; 
+                     $_SESSION["login"] = true;
+                     header('location:index1.php?page=home');
+                 }else{
+                     echo "<p>Something went wrong: " . mysqli_error($connection); + "</p>"; 
+                 } 
+            }else{
+                $query="INSERT INTO users(first_name, last_name, user_level, username, pswrd) 
+                        VALUES ('$fname', '$lname', 'User', '$user', '$hashpass')";
+                $ret1= mysqli_query($connection,$query);
+                if($ret1){ 
+                    $last_id = mysqli_insert_id($connection);
+                    $_SESSION["user"] = $last_id;
+                    $query2 = "SELECT * FROM users WHERE user_id" . "= \"$last_id\"";
+                    $result = mysqli_query($connection, $query2);
+                    $row = mysqli_fetch_array($result);
+                    $_SESSION["firstname"] = $row["first_name"]; 
+                    $_SESSION["login"] = true;
+                    header('location:index1.php?page=home');
                 }else{
                     echo "<p>Something went wrong: " . mysqli_error($connection); + "</p>"; 
                 } 
-
             }
+        }
+            
     }elseif($form == "Login"){
             $user = mysqli_real_escape_string($connection,$_POST["username"]);
             $passw = mysqli_real_escape_string($connection,$_POST["password"]);
@@ -47,7 +72,9 @@
                 $_SESSION["user"] = $row["user_id"];
                 $_SESSION["firstname"] = $row["first_name"]; 
                 $_SESSION["login"] = true;
+                $_SESSION["level"] = $row["user_level"];
                 header('location:index1.php?page=home');
+                
             }else{
                 $_SESSION["login"] = false;
                 header('location:login.php');
