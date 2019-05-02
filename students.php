@@ -36,6 +36,7 @@
       <option value="last_name">Last Name</option>
       <option value="date_of_birth">Date of Birth</option>
       <option value="gender">Gender</option>
+      <option value="current_grade">Current Grade</option>
       <option value="enrollment_status">Enrollment Status</option>
       <option value="student_type">Current of Past</option>
       <option value="date_of_departure">Date of Departure</option>
@@ -53,7 +54,7 @@
 <div class="modal" id="add_data_Modal">
     <div class="modal-content">
       <div class="modal-header">
-        <span class="close">&times;</span>
+      <button class="exit">&times;</button>
         <h2 class="text-center">Add a Student</h2>
       </div>
    <div class="modal-body">
@@ -85,7 +86,7 @@
   <div class="form-group">
     <label class="control-label col-sm-2" for="newdob">Date of Birth:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" id="newdob" name="newdob" required placeholder=" use jQuery datepicker YYYY-MM-DD">
+      <input type="text" class="form-control" id="newdob" name="newdob" required placeholder="Format: YYYY-MM-DD">
     </div>
   </div>
   <div class="form-group">
@@ -96,6 +97,18 @@
             <option name="gender" value="Female">Female</option>
         </select>
     </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="currgrade">Current Grade:</label>
+    <div class="col-sm-4">
+      <select class="form-control" name="currgrade" required>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+      </select>
+            </div>
   </div>
   <div class="form-group">
     <label class="control-label col-sm-2" for="newenrollmentstat">Enrollment Status:</label>
@@ -119,7 +132,7 @@
   <div class="form-group">
     <label class="control-label col-sm-2" for="newdod">Date of departure:</label>
     <div class="col-sm-4">
-      <input type="text" id="newdod" name="newdod" class="form-control" placehoolder="use jQuery datepicker YYYY-MM-DD"/>
+      <input type="text" id="newdod" name="newdod" class="form-control" placeholder="Format: YYYY-MM-DD"/>
     </div>
   </div>
   <div class="modal-footer">
@@ -134,7 +147,7 @@
     <script>
     var modal = document.getElementsByClassName("modal");
     var button = document.getElementsByClassName("button");
-    var span = document.getElementsByClassName("close");
+    var span = document.getElementsByClassName("exit");
 
     button[0].onclick = function() {
         modal[0].style.display = "block";
@@ -174,9 +187,7 @@ $(document).ready(function(){
                 });  
       }); 
 });
-
 </script>
-
 
     
 <script>

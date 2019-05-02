@@ -363,6 +363,125 @@ if($_POST["editstudent"]){
         </div>
         <?php
         }
+    }else if($_POST["editenrollmenthist"]){
+        $enrollmentid = $_GET["enrollment"];
+        $studentid = $_GET["sid"];
+        $query= "SELECT enrollments.enrollment_id, enrollments.student_id, enrollments.enrollment_type, enrollments.enrollment_date, enrollments.grade_of_enrollment, enrollments.cat_status, enrollments.documentation_sent, orders.amount_paid, orders.delivery_status FROM enrollments,orders WHERE enrollments.student_id = '$studentid' and orders.enrollment_id = enrollments.enrollment_id";
+        $ret = mysqli_query($connection, $query);
+        if(!$ret){
+            echo "Error" . mysqli_error($connection);
+        }else{
+            $row = mysqli_fetch_array($ret);
+        ?>
+        <div class="row">
+        <div class="col-sm-12">
+        <h2 class="text-center">Edit Enrollment History</h2>
+        <form class="form-horizontal" method="post" action="modal-processing.php">
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="enrollmentid">Enrollment ID:</label>
+            <div class="col-sm-6">
+              <input type="number" readonly name="enrollmentid" id="enrollmentid" class="form-control" value="<?php echo $row["enrollment_id"];?>">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="studentid">Student ID:</label>
+            <div class="col-sm-6">
+              <input type="number" readonly name="studentid" id="studentid" class="form-control" value="<?php echo $studentid;?>">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="enrollmenttype">Enrollment Type:</label>
+            <div class="col-sm-6"> 
+            <select class="form-control" required name="enrollmenttype">
+            <?php 
+                if($row["enrollment_type"] == "First Time"){
+                    echo "<option name='enrollmenttype' value='First Time' selected>First Time</option>  <option name='enrollmenttype' value='Re-enrollment'>Re-enrollment</option>";
+                }else{
+                    echo "<option name='enrollmenttype' value='First Time'>First Time</option>  <option name='enrollmenttype' value='Re-enrollment' selected>Re-enrollment</option>";
+                }
+            ?>   
+        </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="enrollmentdate">Enrollment Date:</label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" name="enrollmentdate" id="enrollmentdate" required value="<?php echo $row["enrollment_date"];?>">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="gradeofe">Grade of Enrollment:</label>
+            <div class="col-sm-6">
+            <select class="form-control" name="gradeofe" required>
+              <?php 
+                if($row["grade_of_enrollment"] == "8"){
+                    echo "<option name='newgrade' value='8' selected>8</option>
+                            <option name='newgrade' value='9'>9</option>
+                            <option name='newgrade' value='10'>10</option>
+                            <option name='newgrade' value='11'>11</option>
+                            <option name='newgrade' value='12'>12</option>";
+                }elseif($row["grade_of_enrollment"] == "9"){
+                    echo "<option name='newgrade' value='8'>8</option>
+                    <option name='newgrade' value='9' selected>9</option>
+                    <option name='newgrade' value='10'>10</option>
+                    <option name='newgrade' value='11'>11</option>
+                    <option name='newgrade' value='12'>12</option>";
+                }elseif($row["grade_of_enrollment"] == "10"){
+                    echo "<option name='newgrade' value='8'>8</option>
+                    <option name='newgrade' value='9' selected>9</option>
+                    <option name='newgrade' value='10' selected>10</option>
+                    <option name='newgrade' value='11'>11</option>
+                    <option name='newgrade' value='12'>12</option>";
+                }elseif($row["grade_of_enrollment"] == "11"){
+                    echo "<option name='newgrade' value='8'>8</option>
+                    <option name='newgrade' value='9' selected>9</option>
+                    <option name='newgrade' value='10'>10</option>
+                    <option name='newgrade' value='11' selected>11</option>
+                    <option name='newgrade' value='12'>12</option>";
+                }else{
+                    echo "<option name='newgrade' value='8'>8</option>
+                    <option name='newgrade' value='9' selected>9</option>
+                    <option name='newgrade' value='10'>10</option>
+                    <option name='newgrade' value='11'>11</option>
+                    <option name='newgrade' value='12' selected>12</option>";
+                }
+            ?>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="amountpaid">Amount Paid:</label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" name="amountpaid" id="amountpaid" value="<?php echo $row["amount_paid"];?>">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="catstat">CAT Status:</label>
+            <div class="col-sm-6">
+            <textarea rows="4" cols="50" class="form-control" name="catstat" id="catstat"><?php echo $row["cat_status"];?></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="docsent">Documentation Sent:</label>
+            <div class="col-sm-6">
+            <textarea rows="4" cols="50" class="form-control" name="docsent" id="docsent"><?php echo $row["documentation_sent"];?></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-4" for="deliverystat">Delivery Status:</label>
+            <div class="col-sm-6">
+            <textarea rows="4" cols="50" class="form-control" name="deliverystat" id="deliverystat"><?php echo $row["delivery_status"];?></textarea>
+            </div>
+          </div>
+          <div class="modal-footer"> 
+            <input type="hidden" name="purpose" value="editenrollmenthist">
+            <input type="submit" name="editcourse" id="edit" value="Edit" class="btn btn-primary"/>
+          </div>  
+        </form>     
+        </div>
+        </div>
+        <?php
+        }
     }else if($_POST["editgradeinfo"]){
         $studentid = $_GET["sid"];
         $grade = $_GET["grade"];

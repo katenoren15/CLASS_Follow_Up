@@ -5,7 +5,6 @@ session_start();
 $userid = $_SESSION["user"]; 
 
         if(isset($_POST["backup"])){
-            echo getcwd();
             $mysqlExportPath ='class-follow-up.sql';
             $command='mysqldump --opt -h' .$_SESSION["localhost"] .' -u' .$_SESSION["dbuser"] .' -p' .$_SESSION["dbpass"] .' ' .$$_SESSION["database"] .' > ' .$mysqlExportPath;
             exec($command,$output=array(),$worked);

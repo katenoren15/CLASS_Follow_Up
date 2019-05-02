@@ -31,7 +31,7 @@
         <p>To restore the database, <br> 1- select the <b>.sql</b> file obtained from backing up the database, <br> 2- Create a database in phpMyAdmin and enter the name of the database in the which the file will be restored and <br> 3- press the restore button. </p>
         <form enctype="multipart/form-data" action="functions.php" method="post">
             <div class="form-group">
-                <input type="file" class="form-control" name="backup_file" id="backup_file"/>
+                <input type="file" class="form-control" required name="backup_file" id="backup_file"/>
             </div>
             <input type="submit" name="restore" value="Restore" class="btn btn-primary"/>
         </form>

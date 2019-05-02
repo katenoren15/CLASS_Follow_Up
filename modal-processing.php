@@ -235,6 +235,31 @@ if($ret9){
     echo "<div class='alert alert-danger alert-dismissible'>
     <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a> Error" . mysqli_error($connection) ."</div>";
 }
+}elseif($purpose == "editenrollmenthist"){
+    $enrollmentid = mysqli_real_escape_string($connection, $_POST["enrollmentid"]);
+    $enrollmenttype = mysqli_real_escape_string($connection, $_POST["enrollmenttype"]);
+    $enrollmentdate = mysqli_real_escape_string($connection, $_POST["enrollmentdate"]);
+    $goe = mysqli_real_escape_string($connection, $_POST["gradeofe"]);
+    $catstat = mysqli_real_escape_string($connection, $_POST["catstat"]);
+    $docsent = mysqli_real_escape_string($connection, $_POST["docsent"]);
+    $ap = mysqli_real_escape_string($connection, $_POST["amountpaid"]);
+    $delivestat = mysqli_real_escape_string($connection, $_POST["deliverystat"]);
+    
+
+
+$query9 ="UPDATE enrollments SET enrollment_type = '$enrollmenttype', enrollment_date = '$enrollmentdate', grade_of_enrollment = '$goe', cat_status = '$catstat', documentation_sent = '$docsent' WHERE enrollment_id = '$enrollmentid'";
+$ret9 = mysqli_query($connection, $query9);
+$query10 ="UPDATE orders SET amount_paid = '$ap', delivery_status = '$delivestat' WHERE enrollment_id = '$enrollmentid'";
+$ret10 = mysqli_query($connection, $query10);
+if($ret9 && $ret10){
+    header("location:viewstudents.php?id=$s_id");
+    echo "<div class='alert alert-success alert-dismissible'>
+    <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Grade details edited successful.</div>";
+}else{
+    echo $query9 . $query10;
+    echo "<div class='alert alert-danger alert-dismissible'>
+    <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a> Error" . mysqli_error($connection) ."</div>";
+}
 }elseif($purpose == "addcourseinfo"){    
         $courseid = mysqli_real_escape_string($connection, $_POST["courseid"]);
         $grade = mysqli_real_escape_string($connection, $_POST["grade"]);

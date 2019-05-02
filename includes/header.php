@@ -1,5 +1,8 @@
 <?php
 session_start();
+require_once ('includes/dbconnect.php');
+$connection = db_connect();
+
     @$page = $_GET["page"];
     switch(@$page){
         case "":
@@ -91,12 +94,34 @@ session_start();
                             <li><a href="signout.php">Sign Out</a></li>
                        <?php }else{ ?> 
                             <li><a href="myaccount.php">My Account</a></li>
-                            <li><a href="br.php">Backup and Restore</a></li>
+                            <!--<li><a href="br.php">Backup and Restore</a></li>-->
                             <li><a href="signout.php">Sign Out</a></li>
                         <?php } ?>
                         </ul>
                         </li></a></li>
-                        <li><a href="index1.php?page=home#notifications"><span class="glyphicon glyphicon-bell"></span> Notifications</a></li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-bell"></span> Notifications</a>
+                    
+                    <ul class="dropdown-menu">
+                    <?php
+
+                        $query4 = "SELECT student_grade.grade, student_grade.end_date, student_grade.student_id, students.first_name, students.last_name, students.middle_name FROM student_grade, students WHERE students.student_id = student_grade.student_id";
+                        $ret4 = mysqli_query($connection, $query4);
+                        $num_results = mysqli_num_rows($ret4);
+
+                        for($i = 0; $i < $num_results; $i++){
+                            $row4 = mysqli_fetch_array($ret4);
+                            if(strtotime($row4["end_date"]) < strtotime("90 days")) {
+       
+                    ?>
+                    <li class="alert alert-warning alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <?php echo "<strong>" . $row4["first_name"] ." ". $row4["middle_name"] ." ". $row4["last_name"] . "'s </strong> end date for grade " . $row4["grade"] . " is in <strong>less than 90 days</strong> (" . $row4["end_date"] .")"; ?>
+                    </li>
+           
+                <?php
+                 }
+}
+?>  </li></ul>
                     </ul>
             </div>
         </div>

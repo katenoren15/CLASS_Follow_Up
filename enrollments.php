@@ -48,7 +48,7 @@
 <div class="modal" id="madd">
     <div class="modal-content">
       <div class="modal-header">
-        <span class="close">&times;</span>
+      <button class="exit">&times;</button>
         <h2 class="text-center">Add an Enrollment</h2>
       </div>
       <div class="modal-body">
@@ -77,7 +77,7 @@
   <div class="form-group">
     <label class="control-label col-sm-2" for="enrollmentdate">Enrollment Date:</label>
     <div class="col-sm-4">
-      <input type="text" class="form-control" name="enrollmentdate" required placeholder="use jQuery datepicker">
+      <input type="text" class="form-control" name="enrollmentdate" required placeholder="Format: YYYY-MM-DD">
     </div>
   </div>
   <div class="form-group">
@@ -162,7 +162,7 @@ $(document).ready(function(){
 <script>
     var modal = document.getElementsByClassName("modal");
     var button = document.getElementsByClassName("button");
-    var span = document.getElementsByClassName("close");
+    var span = document.getElementsByClassName("exit");
 
     button[0].onclick = function() {
         modal[0].style.display = "block";

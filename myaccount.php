@@ -90,7 +90,7 @@ if($change == "user"){
 <div class="modal" id="muser">
     <div class="modal-content">
         <div class="modal-header">
-            <span class="close">&times;</span>
+        <button class="exit">&times;</button>
             <h2 class="text-center">Change Username</h2>
         </div> 
         <div class="modal-body">   
@@ -113,7 +113,7 @@ if($change == "user"){
 <div class="modal" id="mpass">
     <div class="modal-content">
         <div class="modal-header">
-            <span class="close">&times;</span>
+        <button class="exit">&times;</button>
             <h2 class="text-center">Change Password</h2>
         </div> 
         <div class="modal-body">   
@@ -142,7 +142,7 @@ if($change == "user"){
 
     var modal = document.getElementsByClassName("modal");
     var button = document.getElementsByClassName("button");
-    var span = document.getElementsByClassName("close");
+    var span = document.getElementsByClassName("exit");
 
     button[0].onclick = function() {
         modal[0].style.display = "block";

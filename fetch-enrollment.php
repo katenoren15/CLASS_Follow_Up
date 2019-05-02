@@ -29,7 +29,7 @@ if(mysqli_num_rows($result) > 0){
         <th>Grade</th>
         <th>CAT Status</th>
         <th>Documentation Sent</th>
-        <th colspan="2">Commands</th>
+        <th>Command</th>
     </tr>';
  while($row = mysqli_fetch_array($result))
  {
@@ -42,8 +42,7 @@ if(mysqli_num_rows($result) > 0){
         <td>' .$row["grade_of_enrollment"]. '</td>
         <td>' .$row["cat_status"]. '</td>
         <td>' .$row["documentation_sent"].'</td>
-        <td> <input type="button" class="btn btn-primary" value="View"></td>
-        <td> <form action="edit.php?id=' .$row['enrollment_id']. '" method="post"><input type="submit" class="button btn btn-default" id="' .$row["enrollment_id"]. '" value="Edit" name="editenrollment"></form></td>
+        <td> <form action="edit.php?id=' .$row['enrollment_id']. '" method="post"><input type="submit" class="button btn btn-primary" id="' .$row["enrollment_id"]. '" value="Edit" name="editenrollment"></form></td>
    </tr>
   ';
  }

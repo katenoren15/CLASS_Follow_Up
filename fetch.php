@@ -29,6 +29,7 @@ if(mysqli_num_rows($result) > 0){
     <th>Last Name</th>
     <th>Date of Birth</th>
     <th>Gender</th>
+    <th>Current Grade</th>
     <th>Enrollment Status</th>
     <th>Current or Past</th>
     <th>Date of Departure</th>
@@ -44,6 +45,7 @@ if(mysqli_num_rows($result) > 0){
         <td>' .$row["last_name"]. '</td>
         <td>' .$row["date_of_birth"]. '</td>
         <td>' .$row["gender"]. '</td>
+        <td>' .$row["current_grade"]. '</td>
         <td>' .$row["enrollment_status"]. '</td>
         <td>' .$row["student_type"].'</td>
         <td>' .$row["date_of_departure"]. '</td>
@@ -58,12 +60,5 @@ if(mysqli_num_rows($result) > 0){
 {
  echo 'Data Not Found';
 }
-
-
-if(isset($_POST["student_id"])){  
-    $query = "SELECT * FROM students WHERE student_id = '".$_POST['student_id']."'";  
-    $result = mysqli_query($connection, $query);  
-    $row = mysqli_fetch_array($result);  
-    echo json_encode($row);  
-  }  
+ 
 ?>

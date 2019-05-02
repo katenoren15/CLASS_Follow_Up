@@ -68,13 +68,15 @@
             $ret = mysqli_query($connection,$query);
             $row=mysqli_fetch_array($ret);
             if($row){
-                $validpass = password_verify($passw, $row['pswrd']);
+                $validpass = password_verify($passw, $row['pswrd']);  
+            }
+            if($validpass){
+                $_SESSION["login"] = true;  
                 $_SESSION["user"] = $row["user_id"];
                 $_SESSION["firstname"] = $row["first_name"]; 
-                $_SESSION["login"] = true;
+                
                 $_SESSION["level"] = $row["user_level"];
                 header('location:index1.php?page=home');
-                
             }else{
                 $_SESSION["login"] = false;
                 header('location:login.php');

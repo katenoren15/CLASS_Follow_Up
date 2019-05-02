@@ -14,7 +14,7 @@
         echo "Error" . mysqli_error($connection);
         
     }
-    $query2= "SELECT enrollments.enrollment_id, enrollments.enrollment_type, enrollments.enrollment_date, enrollments.grade_of_enrollment, enrollments.cat_status, enrollments.documentation_sent, orders.amount_paid, orders.order_details FROM enrollments,orders WHERE enrollments.student_id = '$s_id' and orders.enrollment_id = enrollments.enrollment_id";
+    $query2= "SELECT enrollments.enrollment_id, enrollments.enrollment_type, enrollments.enrollment_date, enrollments.grade_of_enrollment, enrollments.cat_status, enrollments.documentation_sent, orders.amount_paid, orders.order_details, orders.delivery_status FROM enrollments,orders WHERE enrollments.student_id = '$s_id' and orders.enrollment_id = enrollments.enrollment_id";
     $ret2 = mysqli_query($connection, $query2);
     if(!$ret2){
         echo "Error" . mysqli_error($connection);
@@ -44,6 +44,7 @@
         <p>Student ID: <?php echo $row["student_id"];?></p>
         <p>Date of Birth: <?php echo $row["date_of_birth"];?></p>
         <p>Gender: <?php echo $row["gender"];?></p>
+        <p>Current Grade: <?php echo $row["current_grade"];?></p>
         <p>Enrollment Status: <?php echo $row["enrollment_status"];?></p>
         <p>Student Type: <?php echo $row["student_type"];?></p>
         <p>Date of Departure: <?php echo $row["date_of_departure"];?></p>
@@ -75,6 +76,7 @@
                   <th>Order Details</th>
                   <th>CAT Status</th>
                   <th>Documentation Sent</th>
+                  <th>Delivery Status</th>
                   <th>Command</th>
                 </tr>
                     <?php
@@ -89,7 +91,8 @@
                   <td> <a href="uploads/<?php echo $row2['order_details'];?>" target="_blank"><?php echo $row2["order_details"];?> </a></td>
                   <td> <?php echo $row2["cat_status"];?> </td>
                   <td> <?php echo $row2["documentation_sent"];?> </td>
-                  <td> <button type="button" class=" btn btn-warning">Edit</button> </td>
+                  <td> <?php echo $row2["delivery_status"];?> </td>
+                  <td><form action="edit.php?enrollment=<?php echo $row2["enrollment_id"];?>&sid=<?php echo $s_id; ?>" method="post"><input type="submit" class=" btn btn-warning" name="editenrollmenthist" value="Edit"></form></td>
                 </tr>
                     <?php } ?>
             </table>
@@ -139,19 +142,7 @@
     </select>    <br> 
             <div class="text-right"><button type="button" class="button btn btn-primary" data-modal="maddc">Add Course Information</button></div>
             <br>
-            <?php 
-                if($_POST["request"]){
-                  $request = $_POST["request"];
-                  $query4= "SELECT student_course.grade, student_course.test_sent, student_course.quickscore_status, courses.course_id, courses.course_name, courses.subjects, courses.number_of_tests, courses.components FROM student_course, courses WHERE student_course.student_id = '$s_id' and courses.course_id=student_course.course_id ORDER BY $request";
-                }else{
-                  $query4= "SELECT student_course.grade, student_course.test_sent, student_course.quickscore_status, courses.course_id, courses.course_name, courses.subjects, courses.number_of_tests, courses.components FROM student_course, courses WHERE student_course.student_id = '$s_id' and courses.course_id=student_course.course_id ORDER BY student_course.grade";
-                }
-                $ret4 = mysqli_query($connection, $query4);
-                  if(!$ret4){
-                    echo "Error" . mysqli_error($connection);
-                  }
-                $row4 = mysqli_fetch_array($ret4);
-            ?>
+          
             <table border="1" class="table table-bordered" id="studcourse_table">
                 <tr>
                     <th>Course Name</th>
@@ -220,7 +211,7 @@
     <div class="modal" id="maddg">
     <div class="modal-content">
       <div class="modal-header">
-        <span class="close">&times;</span>
+      <button class="exit">&times;</button>
         <h2 class="text-center">Add Grade Information</h2>
       </div>
       <div class="modal-body">
@@ -273,7 +264,7 @@
 <div class="modal" id="maddc">
     <div class="modal-content">
     <div class="modal-header">
-      <span class="close">&times;</span>
+    <button class="exit">&times;</button>
       <h2 class="text-center">Add Course Information</h2>
     </div>
     <div class="modal-body">
@@ -320,7 +311,7 @@
 <div class="modal" id="maddt">
     <div class="modal-content">
       <div class="modal-header">
-        <span class="close">&times;</span>
+      <button class="exit">&times;</button>
         <h2 class="text-center">Add a Transaction</h2>
       </div>
       <div class="modal-body">
@@ -386,7 +377,7 @@
 <script>
     var modal = document.getElementsByClassName("modal");
     var button = document.getElementsByClassName("button");
-    var span = document.getElementsByClassName("close");
+    var span = document.getElementsByClassName("exit");
 
     button[0].onclick = function() {
         modal[0].style.display = "block";
@@ -427,14 +418,14 @@
       $("#fetche").on('change', function(){
           var value = $(this).val();
           $.ajax({
-              url:"viewstudents.php",
+              url:"filterviewstudent.php",
               method:"POST",
-              data:"request="+value,
+              data:"requeste="+value,
               beforeSend:function(){
-                  $("#result").html("Filtering...");
+                  $("#studenrolllment_table").html("Filtering...");
               },
               success:function(data){
-                  $("#result").html(data);
+                  $("#studenrolllment_table").html(data);
               },
 
           });
@@ -446,14 +437,14 @@
       $("#fetchg").on('change', function(){
           var value = $(this).val();
           $.ajax({
-              url:"viewstudents.php",
+              url:"filterviewstudent.php",
               method:"POST",
-              data:"request="+value,
+              data:"requestg="+value,
               beforeSend:function(){
-                  $("#result").html("Filtering...");
+                  $("#studgrade_table").html("Filtering...");
               },
               success:function(data){
-                  $("#result").html(data);
+                  $("#studgrade_table").html(data);
               },
 
           });
@@ -465,14 +456,14 @@
       $("#fetchc").on('change', function(){
           var value = $(this).val();
           $.ajax({
-              url:"viewstudents.php",
+              url:"filterviewstudent.php",
               method:"POST",
-              data:"request="+value,
+              data:"requestc="+value,
               beforeSend:function(){
-                  $("#result").html("Filtering...");
+                  $("#studcourse_table").html("Filtering...");
               },
               success:function(data){
-                  $("#result").html(data);
+                  $("#studcourse_table").html(data);
               },
 
           });
@@ -484,14 +475,14 @@
       $("#fetcht").on('change', function(){
           var value = $(this).val();
           $.ajax({
-              url:"viewstudents.php",
+              url:"filterviewstudent.php",
               method:"POST",
-              data:"request="+value,
+              data:"requestt="+value,
               beforeSend:function(){
-                  $("#result").html("Filtering...");
+                  $("#transaction_table").html("Filtering...");
               },
               success:function(data){
-                  $("#result").html(data);
+                  $("#transaction_table").html(data);
               },
 
           });

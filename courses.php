@@ -53,7 +53,7 @@
   <div class="modal" id="madd">
     <div class="modal-content">
       <div class="modal-header">
-        <button data-dismiss="modal" class="close">&times;</button>
+        <button class="exit">&times;</button>
         <h2 class="modal-title text-center">Add a Course</h2>
       </div>   
       <div class="modal-body">
@@ -135,7 +135,7 @@
 <script>
     var modal = document.getElementsByClassName("modal");
     var button = document.getElementsByClassName("button");
-    var span = document.getElementsByClassName("close");
+    var span = document.getElementsByClassName("exit");
 
     button[0].onclick = function() {
         modal[0].style.display = "block";

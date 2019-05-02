@@ -43,15 +43,15 @@ footer{
   border: 1px solid #888;
   width: 70%;
 }
-.close {
+.exit {
   color: #aaaaaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
+.exit:hover,
+.exit:focus {
   color: #000;
   text-decoration: none;
   cursor: pointer;
